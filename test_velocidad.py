@@ -1,7 +1,10 @@
 import speedtest
+import socket
 import csv
 import datetime
 import time 
+
+
 
 # Función para realizar la prueba de velocidad
 def test_speed():
@@ -9,13 +12,14 @@ def test_speed():
     download_speed = st.download() / 1000000
     upload_speed = st.upload() / 1000000
     ping_speed = st.results.ping
+    hostname = socket.gethostname()
 
-    return [datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S'), download_speed, upload_speed, ping_speed]
+    return [datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S'), hostname, download_speed, upload_speed, ping_speed]
 
 # Ciclo infinito para realizar la prueba cada 5 minutos
 with open('speedtest_results.csv', mode='a', newline='') as file:
     writer = csv.writer(file)
-    writer.writerow(['Fecha y Hora', 'Download Speed', 'Upload Speed', 'Ping Speed'])
+    writer.writerow(['Fecha y Hora', 'Hostname', 'Download Speed', 'Upload Speed', 'Ping Speed'])
     while True:
         results = test_speed()
         writer.writerow(results)
